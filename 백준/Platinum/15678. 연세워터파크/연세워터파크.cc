@@ -4,42 +4,42 @@
 #include <queue>
 #include <vector>
 
-
+//연세워터파크-15678
+//재시도
 
 using namespace std;
 
-long long step[100001]={0}; //계단 값 넣기
-vector<long long>dp(100001,0); //현재 index만큼의 징검다리의 위치까지 왔을때의 점수
+long long step[5000001]={0}; //계단 값 넣기
+long long dp[5000001]={0}; 
 
 priority_queue<pair<long long,long long>>pq; //우선순위 큐(최대힙) 생성
-//값, 인덱스
+//점수, 번수
 
 int main() {
 
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);cout.tie(NULL);
-	
-    int n,d;
 
+    int n,d;
     cin>>n>>d;
 
     for(int i=1;i<=n;i++){
         cin>>step[i];
         dp[i]=step[i];
+
+        while(!pq.empty()&&pq.top().second<i-d)pq.pop();
         
-        //d보다 더 먼거리에 있는것들 제외
-        //현재 가장 우선순위가 높은애가 범위에 벗어난 애면 제거
-        while(pq.size()>0&&pq.top().second<i-d)pq.pop();
-         
-        if(pq.size()>0&&pq.top().first>0)dp[i]+=pq.top().first;
-        pq.push(make_pair(dp[i],i));
+        if(!pq.empty())dp[i]=max(dp[i],dp[i]+pq.top().first);
+
+        pq.push({dp[i],i});
+
     }
 
-    long long M=-10000000000;
+
+    long long M=-1000000000; //음수만 있을 수 있으니 큰 음수로 초기화 
     for(int i=1;i<=n;i++){
-        M=max(M,dp[i]);
+        if(M<dp[i])M=dp[i];
     }
-    
     cout<<M;
 
     return 0;
