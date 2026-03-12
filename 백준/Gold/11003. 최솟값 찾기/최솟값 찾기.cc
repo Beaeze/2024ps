@@ -8,28 +8,26 @@
 
 using namespace std;
 
-deque<pair<int,int>>dq;  //숫자,인덱스
+long long step[5000001]={0}; //계단 값 넣기
+
+priority_queue<pair<long long,int>,vector<pair<long long,int>>,greater<pair<long long,int>>>pq; //우선순위 큐(최대힙) 생성
+
 
 int main() {
 
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);cout.tie(NULL);
 	
-    int n,l,num;
+    int n,l;
 
     cin>>n>>l;
 
     for(int i=1;i<=n;i++){
-        cin>>num;
+        cin>>step[i];
+        pq.push(make_pair(step[i],i));
 
-		//나보다 큰애 다 빼기
-		while(!dq.empty()&&dq.back().first>num)dq.pop_back();
-        dq.push_back({num,i});
-
-		//l보다 더 멀어지면 앞에 빼기
-        while(!dq.empty()&&dq.front().second<=i-l)dq.pop_front();
-        
-        cout<<dq.front().first<<" ";
+        while(!pq.empty()&&pq.top().second<=i-l)pq.pop();
+        cout<<pq.top().first<<" ";
     }
 
 
